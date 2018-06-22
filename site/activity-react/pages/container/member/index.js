@@ -24,7 +24,7 @@ export default class News extends React.Component{
         const teamList = result.data.teamList
         const teamIdList = []
         teamList.map((item) => {
-            teamIdList.push(item.teamId)
+            teamIdList.push(item.teamId) //
         })
 
         const listResult = await api('/api/team/infoList', {
