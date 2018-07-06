@@ -36,7 +36,8 @@ const search = async (req, res, next) => {
             })
         }
         const allTimeline = await timelineDB.findByTeamIdList(teamIdList)
-        const  str = new RegExp(keyWord)
+        const key = keyWord.replace(/([\^\$\(\)\*\+\?\.\\\|\[\]\{\}])/g, "\\$1");
+        const  str = new RegExp(key)
         const searchResult =[]
         allTimeline.map((item)=> {
              if(str.test(item.title)||str.test(item.content.content)){
@@ -45,17 +46,17 @@ const search = async (req, res, next) => {
          })
         const result = []
         if(type){
-            const flag = type=="CREATE_TOPIC"
-            console.log("flag", flag)
+            const flag = (type=="TOPIC")
             searchResult.map((item) => {    
                 if(flag){
-                    if(item.type=="CREATE_TOPIC"){
+                    if((item.type=="CREATE_TOPIC")||(item.type=="EDIT_TOPIC")){
                         if(str.test(item.title)||str.test(item.content.content)){                    
                         result.push(item)
                         }
                      }  
+                     
                  }
-                else if(item.type=="REPLY_TOPIC"&&str.test(item.content.content)){
+                else if((item.type=="REPLY_TOPIC")||(item.type=="EDIT_REPLY")&&str.test(item.content.content)){
                        result.push(item)
                      }                 
             })

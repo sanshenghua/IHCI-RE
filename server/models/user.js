@@ -35,7 +35,10 @@ const userSchema = new mongoose.Schema({
     openid: String,
     unionid: { type: String, index: true },
     subState: Boolean,
-    wxUserInfo: mongoose.Schema.Types.Mixed
+    wxUserInfo: mongoose.Schema.Types.Mixed,
+    mailCode :String,
+    mailLimitTime :String,
+    isLive : { type: Boolean, default: false} 
 })
 
 userSchema.statics = {
@@ -69,7 +72,7 @@ userSchema.statics = {
     baseInfoById: async function(userId) {
         const result = await this.findById(userId)
         if(result.personInfo) {
-            result.personInfo._id = result._id 
+            result.personInfo._id = result._id
             return result.personInfo
         } else {
             return {
@@ -97,7 +100,17 @@ userSchema.statics = {
         const result = await this.findOneAndUpdate({unionid: unionid}, userObj, () => {})
         return result
     },
-
+    personInfoList: async function(userIdList){
+        const queryList = []
+        userIdList.length && userIdList.map((item) => {
+            queryList.push({_id: item})
+        })
+        if(queryList && queryList.length) {
+            return this.find({$or: queryList}, {personInfo: 1, isLive: 1}).exec()
+        } else {
+            return []
+        }
+    },
     openidList: async function(userIdList) {
         const queryList = []
         userIdList.length && userIdList.map((item) => {
