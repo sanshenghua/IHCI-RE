@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import BraftEditor from 'braft-editor'
 import './braft.scss'
@@ -58,4 +59,5 @@ export default class Beditor extends React.Component{
             </div>
         )
     }
+
 }
