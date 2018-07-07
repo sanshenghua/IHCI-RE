@@ -52,7 +52,7 @@ const returnTimeline = async (req, res, next) => {
         const personTimeline = []
         allTimeline.map((item)=>{
             if(item.creator._id==personId){
-                personTimeline.push(item)
+            personTimeline.push(item)
             }
         })
         personTimeline.map((item)=>{
